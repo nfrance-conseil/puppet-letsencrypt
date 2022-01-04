@@ -54,7 +54,7 @@ class letsencrypt (
   Boolean $configure_epel,
   Optional[String] $email                = undef,
   Array $environment                     = [],
-  String $package_name                   = $letsencrypt:::params::package_name,
+  String $package_name                   = $letsencrypt::params::package_name,
   $package_ensure                        = 'installed',
   String $package_command                = 'certbot',
   Stdlib::Unixpath $config_dir           = $letsencrypt:::params::config_dir,
