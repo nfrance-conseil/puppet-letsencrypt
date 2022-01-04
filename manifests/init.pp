@@ -54,14 +54,14 @@ class letsencrypt (
   Boolean $configure_epel,
   Optional[String] $email                = undef,
   Array $environment                     = [],
-  String $package_name                   = 'certbot',
+  String $package_name                   = $letsencrypt:::params::package_name,
   $package_ensure                        = 'installed',
   String $package_command                = 'certbot',
-  Stdlib::Unixpath $config_dir           = '/etc/letsencrypt',
+  Stdlib::Unixpath $config_dir           = $letsencrypt:::params::config_dir,
   String $config_file                    = "${config_dir}/cli.ini",
   Hash $config                           = { 'server' => 'https://acme-v02.api.letsencrypt.org/directory' },
   String $cron_scripts_path              = "${facts['puppet_vardir']}/letsencrypt",
-  String $cron_owner_group               = 'root',
+  String $cron_owner_group               = $letsencrypt:::params::root_group
   Boolean $manage_config                 = true,
   Boolean $manage_install                = true,
   Boolean $agree_tos                     = true,
@@ -104,7 +104,7 @@ class letsencrypt (
   file { '/usr/local/sbin/letsencrypt-domain-validation':
     ensure => file,
     owner  => 'root',
-    group  => 'root',
+    group  => $letsencrypt:::params::root_group,
     mode   => '0500',
     source => "puppet:///modules/${module_name}/domain-validation.sh",
   }
