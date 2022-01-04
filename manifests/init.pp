@@ -61,7 +61,7 @@ class letsencrypt (
   String $config_file                    = "${config_dir}/cli.ini",
   Hash $config                           = { 'server' => 'https://acme-v02.api.letsencrypt.org/directory' },
   String $cron_scripts_path              = "${facts['puppet_vardir']}/letsencrypt",
-  String $cron_owner_group               = $letsencrypt::params::root_group
+  String $cron_owner_group               = $letsencrypt::params::root_group,
   Boolean $manage_config                 = true,
   Boolean $manage_install                = true,
   Boolean $agree_tos                     = true,
