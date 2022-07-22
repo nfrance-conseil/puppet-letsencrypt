@@ -58,7 +58,7 @@ class letsencrypt::plugin::dns_cloudflare (
   file { $config_path:
     ensure  => file,
     owner   => 'root',
-    group   => 'root',
+    group   => $telegraf::params::root_group,
     mode    => '0400',
     content => epp('letsencrypt/ini.epp', {
         vars => { '' => $ini_vars },

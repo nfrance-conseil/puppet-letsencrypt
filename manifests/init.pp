@@ -21,6 +21,7 @@
 # @param config A hash representation of the letsencrypt configuration file.
 # @param cron_scripts_path The path for renewal scripts called by cron
 # @param cron_owner_group Group owner of cron renew scripts.
+# @param root_group Group owner for different files.
 # @param manage_config A feature flag to toggle the management of the letsencrypt configuration file.
 # @param manage_install A feature flag to toggle the management of the letsencrypt client installation.
 # @param configure_epel A feature flag to include the 'epel' class and depend on it for package installation.
@@ -52,17 +53,18 @@
 #   run. E.g. '2-30/2' to run on even days.
 #
 class letsencrypt (
-  Boolean $configure_epel,
+  Boolean $configure_epel            = $letsencrypt::params::configure_epel,
   Optional[String] $email            = undef,
   Array $environment                 = [],
   String $package_name               = 'certbot',
   $package_ensure                    = 'installed',
   String $package_command            = 'certbot',
-  Stdlib::Unixpath $config_dir       = '/etc/letsencrypt',
+  Stdlib::Unixpath $config_dir       = $letsencrypt::params::config_dir,
   String $config_file                = "${config_dir}/cli.ini",
   Hash $config                       = { 'server' => 'https://acme-v02.api.letsencrypt.org/directory' },
   String $cron_scripts_path          = "${facts['puppet_vardir']}/letsencrypt",
-  String $cron_owner_group           = 'root',
+  String $cron_owner_group           = $letsencrypt::params::root_group,
+  String $root_group                 = $letsencrypt::params::root_group,
   Boolean $manage_config             = true,
   Boolean $manage_install            = true,
   Boolean $agree_tos                 = true,
@@ -78,7 +80,7 @@ class letsencrypt (
   $renew_cron_hour                   = fqdn_rand(24),
   $renew_cron_minute                 = fqdn_rand(60),
   $renew_cron_monthday               = '*',
-) {
+) inherits letsencrypt::params {
   if $manage_install {
     contain letsencrypt::install # lint:ignore:relative_classname_inclusion
     Class['letsencrypt::install'] ~> Exec['initialize letsencrypt']
