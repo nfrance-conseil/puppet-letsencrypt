@@ -44,7 +44,7 @@ class letsencrypt::renew (
     ensure  => directory,
     path    => "${letsencrypt::config_dir}/renewal-hooks-puppet",
     owner   => 'root',
-    roup   => $letsencrypt::root_group,
+    group   => $letsencrypt::root_group,
     mode    => '0755',
     recurse => true,
     purge   => true,
